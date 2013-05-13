@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dayton Nolan"]
   s.date = "2013-05-13"
-  s.description = "Moses is a simple command parser for writing command line applications"
+  s.description = "TODO: Moses is a simple command parser for writing command line applications"
   s.email = "daytonn@gmail.com"
   s.executables = ["autospec", "coderay", "htmldiff", "jeweler", "ldiff", "pry", "rake", "ri", "rspec"]
   s.extra_rdoc_files = [
@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   s.licenses = ["Apache 2.0"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.23"
-  s.summary = "Moses is a simple command parser for writing command line applications"
+  s.summary = "TODO: Moses is a simple command parser for writing command line applications"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
