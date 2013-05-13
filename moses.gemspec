@@ -40,6 +40,7 @@ Gem::Specification.new do |s|
     "bin/ri",
     "bin/rspec",
     "lib/moses.rb",
+    "moses.gemspec",
     "spec/moses_spec.rb",
     "spec/spec_helper.rb",
     "test.rb"
