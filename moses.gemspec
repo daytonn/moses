@@ -5,18 +5,15 @@
 
 Gem::Specification.new do |s|
   s.name = "moses"
-  s.version = "0.1.0"
+  s.version = "0.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dayton Nolan"]
   s.date = "2013-05-13"
   s.description = "Moses is a simple command parser for writing command line applications"
   s.email = "daytonn@gmail.com"
-  s.executables = ["autospec", "coderay", "htmldiff", "jeweler", "ldiff", "pry", "rake", "ri", "rspec"]
   s.extra_rdoc_files = [
-    "LICENSE",
-    "LICENSE.txt",
-    "README.rdoc"
+    "LICENSE"
   ]
   s.files = [
     ".DS_Store",
@@ -26,19 +23,8 @@ Gem::Specification.new do |s|
     "Gemfile",
     "Gemfile.lock",
     "LICENSE",
-    "LICENSE.txt",
-    "README.rdoc",
     "Rakefile",
     "VERSION",
-    "bin/autospec",
-    "bin/coderay",
-    "bin/htmldiff",
-    "bin/jeweler",
-    "bin/ldiff",
-    "bin/pry",
-    "bin/rake",
-    "bin/ri",
-    "bin/rspec",
     "lib/moses.rb",
     "moses.gemspec",
     "spec/moses_spec.rb",
