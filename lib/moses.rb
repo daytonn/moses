@@ -129,7 +129,7 @@ module Moses
   end
 
   def help
-    @output.puts help_file_content || "Include a HELP file in your project or define a help method"
+    output.puts help_file_content || "Include a HELP file in your project or define a help method"
   end
 
   def help_file_content
@@ -139,7 +139,7 @@ module Moses
   end
 
   def version
-    @output.puts version_file_content || "Include a VERSION file in your project or define a version method"
+    output.puts version_file_content || "Include a VERSION file in your project or define a version method"
   end
 
   def version_file_content
