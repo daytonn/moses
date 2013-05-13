@@ -71,8 +71,11 @@ module Moses
     @args.each_with_index do |arg, index|
       if flag?(arg)
         next_index = index + 1
-        create_variable_option(arg, @args[next_index]) if variable_option? index
-        create_boolean_option(arg) unless variable_option? index
+        if variable_option? index
+          create_variable_option(arg, next_index)
+        else
+          create_boolean_option(arg)
+        end
       end
     end
     @args.delete_if { |a| flag?(a) }
@@ -100,9 +103,14 @@ module Moses
     default_commands.include?(@command) || self.class.method_defined?(:commands) && [*commands].include?(@command) && self.class.method_defined?(@command)
   end
 
-  def create_variable_option(flag, value = nil)
+  def create_variable_option(flag, next_index)
     key = flag.gsub(/^--/, '').to_sym
-    @options[key] = value ? value : true
+    if not_flag? @args[next_index]
+      value = @args[next_index]
+      @args.delete_at next_index
+    end
+
+    @options[key] = value || true
   end
 
   def create_boolean_option(flag)
