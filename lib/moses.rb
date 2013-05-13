@@ -62,7 +62,7 @@ module Moses
     set_option_command
 
     self.send(@command) if valid_command?
-    self.send(@default_command || :help) if @command.nil?
+    self.send(default_command || :help) if @command.nil?
   end
 
   private
@@ -97,7 +97,7 @@ module Moses
   end
 
   def valid_command?
-    default_commands.include?(@command) || [*commands].include?(@command) && self.class.method_defined?(@command)
+    default_commands.include?(@command) || self.class.method_defined?(:commands) && [*commands].include?(@command) && self.class.method_defined?(@command)
   end
 
   def create_variable_option(flag, value = nil)
