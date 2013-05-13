@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "moses"
   gem.homepage = "http://github.com/daytonn/moses"
   gem.license = "Apache 2.0"
-  gem.summary = %Q{TODO: Moses is a simple command parser for writing command line applications}
-  gem.description = %Q{TODO: Moses is a simple command parser for writing command line applications}
+  gem.summary = %Q{Moses is a simple command parser for writing command line applications}
+  gem.description = %Q{Moses is a simple command parser for writing command line applications}
   gem.email = "daytonn@gmail.com"
   gem.authors = ["Dayton Nolan"]
   # dependencies defined in Gemfile
