@@ -63,3 +63,6 @@ By default, Moses will read the contents of the HELP.md (or HELP) file in the ro
     myapp --help
  
  Similarly, Moses will use the VERSION file with the `-v` and `--version` flags.
+ 
+     myapp -v
+     myapp --version
