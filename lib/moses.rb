@@ -36,7 +36,7 @@ module Moses
     base.extend(ClassMethods)
     class_eval %Q{
       def output
-        @output ||= STDOUT
+        @output ||= $stdout
       end
     }
   end

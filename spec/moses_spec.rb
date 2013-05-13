@@ -27,7 +27,7 @@ describe Moses do
         include Moses
       end
       app = TestOutputAppClass.new
-      expect(app.output).to eq(STDOUT)
+      expect(app.output).to eq($stdout)
     end
 
     it "defers to class defined output" do
