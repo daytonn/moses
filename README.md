@@ -12,7 +12,7 @@ Installation with ruby-gems:
 
 Installation with bundler:
 
-    gem 'moses', '0.1.4'
+    gem 'moses', '0.1.5'
 
 Creating a Moses application
 ----------------------------
@@ -118,7 +118,7 @@ In the above example, the `main` method will execute whenever your application i
 Options
 -------
 
-Moses will parse any flags passed to your application that begin with one or two dashes. There are two basic types of flags, boolean and variable flags. 
+Moses will parse any flags passed to your application that begin with one or two dashes. There are two basic types of flags, boolean and variable flags.
 
 ### Boolean flags
 
