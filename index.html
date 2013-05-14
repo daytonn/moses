@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Moses by daytonn</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/daytonn/moses">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/daytonn/moses/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/daytonn/moses/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Moses</h1>
+          <p>Moses is a simple option parser for writing command line applications</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/daytonn">daytonn</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Moses</h1>
+
+<p>Moses is a simple option/command parser for building command line applications in Ruby.
+<img src="moses.png" alt="image"></p>
+
+<h2>Getting Started</h2>
+
+<p>Installation with ruby-gems:</p>
+
+<pre><code>gem install moses
+</code></pre>
+
+<p>Installation with bundler:</p>
+
+<pre><code>gem 'moses', '0.1.5'
+</code></pre>
+
+<h2>Creating a Moses application</h2>
+
+<p>Moses is a module that you can include into any Ruby class to provide all the plumbing you need to write command line applications. Create the following directory structure for your application</p>
+
+<ul>
+<li>bin
+
+<ul>
+<li>myapp</li>
+</ul>
+</li>
+<li>lib
+
+<ul>
+<li>myapp.rb</li>
+</ul>
+</li>
+<li>VERSION</li>
+<li>HELP.md (or just HELP)</li>
+</ul><p>Create a class for your applications functionality:</p>
+
+<div class="highlight"><pre>  <span class="k">class</span> <span class="nc">MyApp</span>
+    <span class="kp">include</span> <span class="no">Moses</span>
+    <span class="n">commands</span> <span class="ss">:foo</span><span class="p">,</span> <span class="ss">:bar</span>
+
+    <span class="k">def</span> <span class="nf">foo</span>
+      <span class="c1"># do stuff</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">bar</span>
+      <span class="c1"># do stuff</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</pre></div>
+
+<p>Then all you need in your executable file is the following:</p>
+
+<div class="highlight"><pre>  <span class="c1">#!/usr/bin/env ruby</span>
+  <span class="vg">$:</span> <span class="o">&lt;&lt;</span> <span class="no">File</span><span class="o">.</span><span class="n">expand_path</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">__FILE__</span><span class="p">),</span> <span class="s2">"../lib"</span><span class="p">))</span>
+  <span class="nb">require</span> <span class="s1">'myapp'</span>
+  <span class="no">MyApp</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">run</span>
+</pre></div>
+
+<p>That's all you need to create a CLI app. You can now call your application like so:</p>
+
+<pre><code>myapp foo
+myapp bar
+</code></pre>
+
+<p>By default, Moses will read the contents of the HELP.md (or HELP) file in the root of your project. This will be used to display your application instructions when passed the flags <code>-h</code> and <code>--help</code></p>
+
+<pre><code>myapp -h
+myapp --help
+</code></pre>
+
+<p>Similarly, Moses will use the VERSION file with the <code>-v</code> and <code>--version</code> flags.</p>
+
+<pre><code> myapp -v
+ myapp --version
+</code></pre>
+
+<p>You may choose not to use <code>VERSION</code> or <code>HELP</code> files in your project and simply define corresponding methods that output what you want:</p>
+
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">help</span>
+  <span class="n">output</span><span class="o">.</span><span class="n">puts</span> <span class="s2">"This is my help text"</span>
+<span class="k">end</span>
+
+<span class="k">def</span> <span class="nf">version</span>
+  <span class="n">output</span><span class="o">.</span><span class="n">puts</span> <span class="s2">"X.X.X"</span>
+<span class="k">end</span>
+</pre></div>
+
+<h2>Commands</h2>
+
+<p>Moses treats the first non-flag argument passed to it as a command (sometimes referred to as sub-commands). A command is simply a method defined in your application class. To define a command, simply add a command definition to your class and implement a method of the same name:</p>
+
+<div class="highlight"><pre>  <span class="k">class</span> <span class="nc">MyApp</span>
+    <span class="kp">include</span> <span class="no">Moses</span>
+    <span class="n">commands</span> <span class="ss">:foo</span>
+
+    <span class="k">def</span> <span class="nf">foo</span>
+      <span class="c1"># do stuff</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</pre></div>
+
+<p>This will create a <code>foo</code> command that can be called from the command line: <code>myapp foo</code></p>
+
+<h3>Default command</h3>
+
+<p>Sometimes you will want to create an application that has no "sub-commands" and will simply be called from the command line with options. To run a command by default, add a default_command definition to your class:</p>
+
+<div class="highlight"><pre>  <span class="k">class</span> <span class="nc">MyApp</span>
+    <span class="kp">include</span> <span class="no">Moses</span>
+    <span class="n">default_command</span> <span class="ss">:main</span>
+
+    <span class="k">def</span> <span class="nf">main</span>
+      <span class="c1"># do stuff</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+</pre></div>
+
+<p>In the above example, the <code>main</code> method will execute whenever your application is run. Simply calling <code>myapp</code> from the command line will execute the <code>main</code> method.</p>
+
+<h2>Options</h2>
+
+<p>Moses will parse any flags passed to your application that begin with one or two dashes. There are two basic types of flags, boolean and variable flags.</p>
+
+<h3>Boolean flags</h3>
+
+<p>Flags which begin with one dash are treated as boolean flags. A boolean flag is basically an <em>ON</em> switch:</p>
+
+<pre><code>myapp -x
+</code></pre>
+
+<p>The above will create an <code>:x</code> key in the <code>@options</code> hash that is true. Given the above switch, we could write code to handle that switch like so:</p>
+
+<div class="highlight"><pre>  <span class="k">if</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:x</span><span class="o">]</span>
+    <span class="c1"># stuff here</span>
+  <span class="k">end</span>
+</pre></div>
+
+<h3>Variable flags</h3>
+
+<p>Flags which begin with two dashes are slightly trickier than boolean flags. Variable flags can be either boolean or be passed a value. Variable flags will be treated as a boolean if no arguments are passed after them:</p>
+
+<pre><code>myapp --foo
+</code></pre>
+
+<p>In the above example the value of <code>@options[:foo]</code> will be true. However if an argument is passed after the flag, it will automatically be assigned as the value:</p>
+
+<pre><code>myapp --foo bar
+</code></pre>
+
+<p>In this case the value of <code>@options[:foo]</code> will be the string <code>bar</code>. The flag can still be treated as a boolean but it's adjacent argument can also be accessed as it's value:</p>
+
+<div class="highlight"><pre>  <span class="k">if</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="vi">@options</span><span class="o">[</span><span class="ss">:foo</span><span class="o">]</span> <span class="c1"># bar</span>
+  <span class="k">end</span>
+</pre></div>
+
+<h3>Option commands</h3>
+
+<p>It's common to run a command as the result of an option being passed (ie. <code>-h</code> or <code>--help</code>). To run a command automatically when an option is passed, simply add an <code>option_commands</code> definition to your class:</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyApp</span>
+  <span class="kp">include</span> <span class="no">Moses</span>
+  <span class="n">option_commands</span><span class="p">({</span> <span class="ss">:auto</span> <span class="o">=&gt;</span> <span class="ss">:run_automatic</span> <span class="p">})</span>
+
+  <span class="k">def</span> <span class="nf">run_automatic</span>
+    <span class="c1"># automatically runs when --auto is passed</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+
+<p><em>Note: When using <code>option_commands</code>, no other command will be run. If you wish to execute multiple commands based on an option, simply use the boolean flag.</em></p>
+
+<h2>Output</h2>
+
+<p>By default Moses exposes <code>$stdout</code> through an <code>output</code> method. To output to the terminal, simply use <code>output.puts</code>:</p>
+
+<div class="highlight"><pre>  <span class="n">output</span><span class="o">.</span><span class="n">puts</span> <span class="s2">"This will be output to STDOUT"</span>
+</pre></div>
+
+<p>To substitute your own output, define an initializer that overwrites the <code>@output</code> variable:</p>
+
+<div class="highlight"><pre><span class="k">class</span> <span class="nc">MyApp</span>
+  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="vi">@output</span> <span class="o">=</span> <span class="n">output</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="no">MyApp</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="no">File</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">'output.txt'</span><span class="p">))</span>
+</pre></div>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
