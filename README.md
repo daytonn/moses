@@ -167,12 +167,12 @@ class MyApp
 end
 ```
 
-_Note: When using option_commands, no other command will be run. If you wish to execute a command and a command based on an option, simply use the boolean flag._
+_Note: When using `option_commands`, no other command will be run. If you wish to execute multiple commands based on an option, simply use the boolean flag._
 
 Output
 ------
 
-By default Moses exposes `$stdout` through an instance method named output. To output to the terminal, simply use `output.puts`:
+By default Moses exposes `$stdout` through an `output` method. To output to the terminal, simply use `output.puts`:
 
 ```rb
   output.puts "This will be output to STDOUT"
