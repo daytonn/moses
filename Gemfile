@@ -1,5 +1,7 @@
 source "http://rubygems.org"
 
+gem 'activesupport'
+
 group :development do
   gem "rspec"
   gem "bundler"

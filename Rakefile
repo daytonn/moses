@@ -21,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{Moses is a simple command parser for writing command line applications}
   gem.email = "daytonn@gmail.com"
   gem.authors = ["Dayton Nolan"]
+  gem.executables = ["moses"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new
