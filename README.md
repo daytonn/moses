@@ -1,6 +1,8 @@
 Moses
 =====
 
+![image](moses.png)
+
 Moses is a simple option/command parser for building command line applications in Ruby.
 
 Getting Started
