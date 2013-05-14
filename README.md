@@ -122,7 +122,7 @@ Moses will parse any flags passed to your application that begin with one or two
 
 ### Boolean flags
 
-Flags which begin with one dash are treated as boolean flags. A boolean flag is basically an on switch:
+Flags which begin with one dash are treated as boolean flags. A boolean flag is basically an _ON_ switch:
 
     myapp -x
 
