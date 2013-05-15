@@ -70,6 +70,7 @@ module Moses
   def parse_options
     @args.each_with_index do |arg, index|
       if flag?(arg)
+        #TODO split compound single dash flags
         next_index = index + 1
         if variable_option? index
           create_variable_option(arg, next_index)
@@ -133,6 +134,7 @@ module Moses
   def variable_option?(i)
     arg = @args[i]
     next_arg = @args[i+1]
+    #TODO: remove long_flag? check for short flag compatibility
     long_flag?(arg) && next_arg && not_flag?(next_arg)
   end
 
