@@ -18,7 +18,7 @@ module Moses
     def default_command(cmd)
       class_eval %Q{
         def default_command
-          @default_command ||= "#{cmd}".to_sym
+          @default_command ||= :#{cmd}
         end
       }
     end
@@ -34,11 +34,10 @@ module Moses
 
   def self.included(base)
     base.extend(ClassMethods)
-    class_eval %Q{
-      def output
-        @output ||= $stdout
-      end
-    }
+  end
+
+  def output
+    @output ||= $stdout
   end
 
   def default_commands
@@ -83,7 +82,9 @@ module Moses
   end
 
   def parse_command
-    @command = @args.shift.to_sym if @args.first && @args.first.respond_to?(:to_sym)
+    unless @default_command
+      @command = @args.shift.to_sym if @args.first && @args.first.respond_to?(:to_sym)
+    end
   end
 
   def set_option_command
