@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "moses"
-  s.version = "0.1.5"
+  s.version = "0.1.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dayton Nolan"]
-  s.date = "2013-05-14"
+  s.date = "2013-05-20"
   s.description = "Moses is a simple command parser for writing command line applications"
   s.email = "daytonn@gmail.com"
   s.executables = ["moses"]
@@ -24,7 +24,6 @@ Gem::Specification.new do |s|
     ".ruby-version",
     "Gemfile",
     "Gemfile.lock",
-    "HELP.md",
     "LICENSE",
     "README.md",
     "Rakefile",
