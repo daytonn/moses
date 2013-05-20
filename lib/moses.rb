@@ -82,7 +82,7 @@ module Moses
   end
 
   def parse_command
-    unless @default_command
+    unless default_command
       @command = @args.shift.to_sym if @args.first && @args.first.respond_to?(:to_sym)
     end
   end

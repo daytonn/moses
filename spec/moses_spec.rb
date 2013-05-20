@@ -119,13 +119,26 @@ describe Moses do
   end
 
   describe "default_command" do
-    it "can be set with the class method" do
+    before do
       class CustomDefaultCommandClass
         include Moses
         default_command :some_command
+
+        def some_command
+        end
       end
       @dc_app = CustomDefaultCommandClass.new
+    end
+
+    it "can be set with the class method" do
       expect(@dc_app.default_command).to eq(:some_command)
+    end
+
+    it "doesn't overwrite the default command when passed arguments" do
+      ARGV = ['test']
+      @dc_app.run
+      expect(@dc_app.command).to be_nil
+      expect(@dc_app.args.first).to eq('test')
     end
   end
 
