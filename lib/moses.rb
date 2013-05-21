@@ -3,7 +3,7 @@ module Moses
   VERSION_FILE = 'VERSION'
   HELP_FILE = 'HELP'
 
-  attr_reader :args, :command, :options
+  attr_reader :args, :command, :options, :default_command
   attr :default_option_commands, :default_commands
 
   module ClassMethods
@@ -61,7 +61,7 @@ module Moses
     set_option_command
 
     self.send(@command) if valid_command?
-    self.send(default_command || :help) if @command.nil?
+    self.send(@default_command || :help) if @command.nil?
   end
 
   private
