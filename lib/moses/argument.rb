@@ -1,26 +1,35 @@
 module Moses
-  class Argument
+  class Argument < String
 
     attr_accessor :value
 
     def initialize(string)
-      @string = string
+      @value = string
+      super(string)
     end
 
     def to_s
-      @value || @string
+      value
     end
 
     def flag?
-      @string =~ /^-/ ? true : false
+      self =~ /^-/ ? true : false
     end
 
     def short_flag?
-      @string =~ /^-{1}[^-]/ ? true : false
+      self =~ /^-{1}[^-]/ ? true : false
     end
 
     def long_flag?
-      @string =~ /^-{2}/ ? true : false
+      self =~ /^-{2}/ ? true : false
+    end
+
+    def not_flag?
+      !flag?
+    end
+
+    def to_sym
+      value.gsub(/^-{1,2}/, '').to_sym
     end
 
   end

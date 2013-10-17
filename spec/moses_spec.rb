@@ -17,10 +17,6 @@ describe Moses do
     @app = TestAppClass.new(@output)
   end
 
-  after do
-    ARGV.clear
-  end
-
   describe 'output' do
     it "defaults to STDOUT" do
       class TestOutputAppClass
@@ -133,7 +129,6 @@ describe Moses do
     it "can be set with the class method" do
       expect(@dc_app.default_command).to eq(:some_command)
     end
-
   end
 
   describe 'option commands' do
@@ -153,8 +148,12 @@ describe Moses do
       class OptionCommandsClass
         include Moses
         option_commands({ foo: :foo, v: :verbose })
+
+        def initialize(output)
+          @output = output
+        end
       end
-      @opt_cmd = OptionCommandsClass.new
+      @opt_cmd = OptionCommandsClass.new(@output)
 
       expect(@opt_cmd.option_commands).to have_key(:foo)
       expect(@opt_cmd.option_commands).to have_key(:h)
@@ -180,8 +179,12 @@ describe Moses do
         include Moses
         commands :verbose
         option_commands({ foo: :foo, v: :verbose })
+
+        def initialize(output)
+          @output = output
+        end
       end
-      @opt_cmd = OptionCommandsClass.new
+      @opt_cmd = OptionCommandsClass.new(@output)
       stub_const("ARGV", ['-v'])
       @opt_cmd.run
       expect(@opt_cmd.command).to eq(:verbose)

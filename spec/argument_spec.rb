@@ -8,31 +8,45 @@ describe Moses::Argument do
   end
 
   describe "flags" do
-    before do
-      @short_flag = Moses::Argument.new '-f'
-      @long_flag = Moses::Argument.new '--long_flag'
-      @non_flag = Moses::Argument.new 'test'
-    end
+    let(:short_flag) { Moses::Argument.new '-f' }
+    let(:long_flag) { Moses::Argument.new '--long_flag' }
+    let(:non_flag) { Moses::Argument.new 'test' }
 
     it "determines if the argument is a flag" do
-      expect(@short_flag.flag?).to be_true
-      expect(@long_flag.flag?).to be_true
-
-      expect(@non_flag.flag?).to be_false
+      expect(short_flag).to be_flag
+      expect(long_flag).to be_flag
+      expect(non_flag).not_to be_flag
     end
 
     it "determines if the argument is a short flag" do
-      expect(@short_flag.short_flag?).to be_true
+      expect(short_flag).to be_short_flag
 
-      expect(@long_flag.short_flag?).to be_false
-      expect(@non_flag.short_flag?).to be_false
+      expect(long_flag).not_to be_short_flag
+      expect(non_flag).not_to be_short_flag
     end
 
     it "determines if the argument is a long flag" do
-      expect(@long_flag.long_flag?).to be_true
+      expect(long_flag).to be_long_flag
 
-      expect(@short_flag.long_flag?).to be_false
-      expect(@non_flag.long_flag?).to be_false
+      expect(short_flag).not_to be_long_flag
+      expect(non_flag).not_to be_long_flag
+    end
+
+    it "determine if the argument is not a flag" do
+      expect(long_flag).not_to be_not_flag
+      expect(short_flag).not_to be_not_flag
+      expect(non_flag).to be_not_flag
+    end
+
+    describe "to_sym" do
+      it "removes the dashes prepending flags" do
+        expect(short_flag.to_sym).to eq(:f)
+        expect(long_flag.to_sym).to eq(:long_flag)
+      end
+
+      it "converts plain args to symbol" do
+        expect(non_flag.to_sym).to eq(:test)
+      end
     end
   end
 
