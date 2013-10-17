@@ -39,12 +39,12 @@ describe Moses::Application do
 
       it "makes a HELP file" do
         expect(File.file?("#{@tmp_dir}/test_app/HELP.md")).to be_true
-        expect(File.read("#{@tmp_dir}/test_app/HELP.md")).to eq("Todo: Add your own instructions")
+        expect(File.read("#{@tmp_dir}/test_app/HELP.md")).to eq("Todo: Add your own instructions\n")
       end
 
       it "makes a version file" do
         expect(File.file?("#{@tmp_dir}/test_app/VERSION")).to be_true
-        expect(File.read("#{@tmp_dir}/test_app/VERSION")).to eq("0.0.0")
+        expect(File.read("#{@tmp_dir}/test_app/VERSION")).to eq("0.0.0\n")
       end
 
       it "makes a bin directory" do
@@ -58,7 +58,7 @@ describe Moses::Application do
 $: << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
 require "test_app"
 TestApp.new.run
-        }
+}
         expect(File.read("#{@tmp_dir}/test_app/bin/test_app")).to eq(expected_content)
       end
 
@@ -73,7 +73,7 @@ TestApp.new.run
 class TestApp
   include Moses
 end
-        }
+}
         expect(File.read("#{@tmp_dir}/test_app/lib/test_app.rb")).to eq(expected_content)
       end
 
