@@ -11,4 +11,11 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 RSpec.configure do |config|
 
+  def fixture(file)
+    File.join(File.expand_path("../", __FILE__), "fixtures", file)
+  end
+
+  def fixture_content(file)
+    File.read(fixture(file))
+  end
 end

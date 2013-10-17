@@ -1,25 +1,25 @@
-require 'moses'
-require 'fileutils'
-require 'active_support/inflector'
+require "moses"
+require "fileutils"
+require "erb"
+require "active_support/inflector"
 
 class Moses::Application
   include Moses
   commands :create
-  attr_reader :root_path
+  attr_reader :root_path, :app_name
 
   def initialize(root_path = Dir.getwd)
     @root_path = root_path
   end
 
   def create
-    if @args.first
-      @app_name = @args.first
+    if @app_name = args.first
       create_app_dir
+      create_bin_dir
+      create_lib_dir
       create_help_file
       create_version_file
-      create_bin_dir
       create_bin_file
-      create_lib_dir
       create_application_class
     else
       output.puts "You need to name your application: moses create myapp"
@@ -29,60 +29,77 @@ class Moses::Application
   private
 
   def create_app_dir
-    FileUtils.mkdir("#{@root_path}/#{@app_name}") unless File.directory?("#{@root_path}/#{@app_name}")
-  end
-
-  def create_help_file
-    unless File.file?("#{@root_path}/#{@app_name}/HELP.md")
-      FileUtils.touch("#{@root_path}/#{@app_name}/HELP.md")
-      File.open("#{@root_path}/#{@app_name}/HELP.md", 'w+') do |f|
-        f << "Todo: Add your own instructions"
-      end
-    end
-  end
-
-  def create_version_file
-    unless File.file?("#{@root_path}/#{@app_name}/VERSION")
-      FileUtils.touch("#{@root_path}/#{@app_name}/VERSION")
-      File.open("#{@root_path}/#{@app_name}/VERSION", 'w+') do |f|
-        f << "0.0.0"
-      end
-    end
+    create_directory(app_dir)
   end
 
   def create_bin_dir
-    FileUtils.mkdir("#{@root_path}/#{@app_name}/bin") unless File.directory?("#{@root_path}/#{@app_name}/bin")
-  end
-
-  def create_bin_file
-    unless File.file?("#{@root_path}/#{@app_name}/bin/#{@app_name}")
-      FileUtils.touch("#{@root_path}/#{@app_name}/bin/#{@app_name}")
-      FileUtils.chmod("u+x", "#{@root_path}/#{@app_name}/bin/#{@app_name}")
-      File.open("#{@root_path}/#{@app_name}/bin/#{@app_name}", 'w+') do |f|
-        f << %Q{#!/usr/bin/env ruby
-$: << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
-require "#{@app_name}"
-#{@app_name.camelize}.new.run
-        }
-      end
-    end
+    create_directory(bin_dir)
   end
 
   def create_lib_dir
-    FileUtils.mkdir("#{@root_path}/#{@app_name}/lib") unless File.directory?("#{@root_path}/#{@app_name}/lib")
+    FileUtils.mkdir(lib_dir) unless File.directory?(lib_dir)
+  end
+
+  def create_help_file
+    copy_template("HELP.md", help_file)
+  end
+
+  def create_version_file
+    copy_template("VERSION", version_file)
+  end
+
+  def create_bin_file
+    unless File.file?(bin_file)
+      bin_template = ERB.new(File.read(template("bin_file.erb")))
+      File.open(bin_file, "w+") { |f| f << bin_template.result(binding) }
+      FileUtils.chmod("u+x", bin_file)
+    end
   end
 
   def create_application_class
-    unless File.file?("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb")
-      FileUtils.touch("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb")
-      File.open("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb", 'w+') do |f|
-        f << %Q{require "moses"
-
-class #{@app_name.camelize}
-  include Moses
-end
-        }
-      end
+    unless File.file?(app_class_file)
+      class_template = ERB.new(File.read(template("app_class.erb")))
+      File.open(app_class_file, 'w+') { |f| f << class_template.result(binding) }
     end
+  end
+
+  def app_dir
+    File.join(root_path, app_name)
+  end
+
+  def bin_dir
+    File.join(app_dir, "bin")
+  end
+
+  def lib_dir
+    File.join(app_dir, "lib")
+  end
+
+  def help_file
+    File.join(app_dir, "HELP.md")
+  end
+
+  def version_file
+    File.join(app_dir, "VERSION")
+  end
+
+  def bin_file
+    File.join(bin_dir, app_name)
+  end
+
+  def app_class_file
+    File.join(lib_dir, "#{app_name}.rb")
+  end
+
+  def template(filename)
+    File.join(File.dirname(File.expand_path("../..", __FILE__)), "templates", filename)
+  end
+
+  def copy_template(src, dest)
+    FileUtils.cp(template(src), dest) unless File.file?(dest)
+  end
+
+  def create_directory(dir)
+    FileUtils.mkdir(dir) unless File.directory?(dir)
   end
 end

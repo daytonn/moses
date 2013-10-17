@@ -1,3 +1,8 @@
+$: << File.join(File.expand_path('../..', __FILE__), 'lib')
+
+require "moses/argument"
+require "moses/arguments"
+
 module Moses
 
   VERSION_FILE = 'VERSION'
@@ -55,88 +60,67 @@ module Moses
 
   def run
     @options = {}
-    @args = Array.try_convert ARGV
+    @args = Moses::Arguments.new
     parse_options
     parse_command
     set_option_command
 
-    self.send(@command) if valid_command?
-    self.send(@default_command || :help) if @command.nil?
+    if valid_command?
+      self.send(@command)
+    else
+      self.send(@default_command || :help)
+    end
   end
 
   private
 
   def parse_options
-    @args.each_with_index do |arg, index|
-      if flag?(arg)
-        #TODO split compound single dash flags -abc
-        next_index = index + 1
-        if variable_option? index
-          create_variable_option(arg, next_index)
-        else
-          create_boolean_option(arg)
-        end
-      end
+    args.each do |arg|
+      @options[arg.to_sym] = args.get_variable(arg) if arg.flag?
     end
-    @args.delete_if { |a| flag?(a) }
   end
 
   def parse_command
-    unless default_command && @args.first == default_command
-      @command = @args.shift.to_sym if @args.first && @args.first.respond_to?(:to_sym)
-    end
+    @command = args.shift.to_sym if args.first && non_default_command?
   end
 
   def set_option_command
     @options.each do |opt, v|
-      if self.class.method_defined?(:option_commands) && option_commands[opt]
-        @command = option_commands[opt]
-        return
-      end
-
-      if default_option_commands[opt]
-        @command = default_option_commands[opt]
-        return
-      end
+      return @command = option_commands[opt] if has_option_command?(opt)
+      return @command = default_option_commands[opt] if default_option_commands[opt]
     end
+  end
+
+  def default_command?
+    default_command && args.first == default_command
+  end
+
+  def non_default_command?
+    !default_command?
   end
 
   def valid_command?
-    default_commands.include?(@command) || self.class.method_defined?(:commands) && [*commands].include?(@command) && self.class.method_defined?(@command)
+    @command && default_commands.include?(@command) || has_command?(@command)
   end
 
-  def create_variable_option(flag, next_index)
-    key = flag.gsub(/^--/, '').to_sym
-    if not_flag? @args[next_index]
-      value = @args[next_index]
-      @args.delete_at next_index
-    end
-
-    @options[key] = value || true
+  def has_commands?
+    self.class.method_defined?(:commands)
   end
 
-  def create_boolean_option(flag)
-    key = flag.gsub(/^-{1,2}/, '').to_sym
-    @options[key] = true
+  def has_command?(command)
+    has_commands? && [*commands].include?(command) && command_defined?(@command)
   end
 
-  def flag?(arg)
-    arg =~ /^-/
+  def command_defined?(commant)
+    self.class.method_defined?(command)
   end
 
-  def long_flag?(arg)
-    arg =~ /^-{2}/
+  def has_option_commands?
+    self.class.method_defined?(:option_commands)
   end
 
-  def not_flag?(arg)
-    arg =~ /^[^-]/
-  end
-
-  def variable_option?(i)
-    arg = @args[i]
-    next_arg = @args[i+1]
-    #TODO: remove long_flag? check for short flag compatibility
-    long_flag?(arg) && next_arg && not_flag?(next_arg)
+  def has_option_command?(command)
+    has_option_commands? && !!option_commands[command]
   end
 
   def help
@@ -157,5 +141,4 @@ module Moses
     content = File.read(File.expand_path(Moses::VERSION_FILE)) if File.exist?(File.expand_path(Moses::VERSION_FILE))
     content
   end
-
 end
