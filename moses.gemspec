@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "moses"
-  s.version = "0.1.9"
+  s.version = "0.1.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dayton Nolan"]
@@ -31,11 +31,23 @@ Gem::Specification.new do |s|
     "bin/moses",
     "lib/moses.rb",
     "lib/moses/application.rb",
+    "lib/moses/argument.rb",
+    "lib/moses/arguments.rb",
     "moses.gemspec",
     "moses.png",
     "spec/application_spec.rb",
+    "spec/argument_spec.rb",
+    "spec/arguments_spec.rb",
+    "spec/fixtures/HELP.md",
+    "spec/fixtures/VERSION",
+    "spec/fixtures/app_class.rb",
+    "spec/fixtures/bin_file",
     "spec/moses_spec.rb",
-    "spec/spec_helper.rb"
+    "spec/spec_helper.rb",
+    "templates/HELP.md",
+    "templates/VERSION",
+    "templates/app_class.erb",
+    "templates/bin_file.erb"
   ]
   s.homepage = "http://github.com/daytonn/moses"
   s.licenses = ["Apache 2.0"]
