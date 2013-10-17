@@ -94,7 +94,7 @@ describe Moses do
 
     describe "version_file_content" do
       it "returns the contents of the VERSION file" do
-        module Moses VERSION_FILE = 'VERSION.test'; end
+        stub_const("Moses::VERSION_FILE", "VERSION.test")
         File.open('VERSION.test', 'w+') do |f|
           f << 'x.x.x'
         end
@@ -103,13 +103,13 @@ describe Moses do
     end
 
     it "outputs an instruction message when no VERSION file is present" do
-      module Moses VERSION_FILE = 'VERSION.test'; end
+      stub_const("Moses::VERSION_FILE", "VERSION.test")
       @output.should_receive(:puts).with("Include a VERSION file in your project or define a version method")
       @app.send(:version)
     end
 
     it "returns the contents of the VERSION file" do
-      module Moses VERSION_FILE = 'VERSION.test'; end
+      stub_const("Moses::VERSION_FILE", "VERSION.test")
       File.open("VERSION.test", "w+") do |f|
         f << 'x.x.x'
       end
@@ -134,12 +134,6 @@ describe Moses do
       expect(@dc_app.default_command).to eq(:some_command)
     end
 
-    it "doesn't overwrite the default command when passed arguments" do
-      ARGV = ['test']
-      @dc_app.run
-      expect(@dc_app.command).to be_nil
-      expect(@dc_app.args.first).to eq('test')
-    end
   end
 
   describe 'option commands' do
@@ -176,7 +170,7 @@ describe Moses do
     end
 
     it "sets the command to the default option command if the default option is set" do
-      ARGV = ['-h']
+      stub_const("ARGV", ['-h'])
       @app.run
       expect(@app.command).to eq(:help)
     end
@@ -188,7 +182,7 @@ describe Moses do
         option_commands({ foo: :foo, v: :verbose })
       end
       @opt_cmd = OptionCommandsClass.new
-      ARGV = ['-v']
+      stub_const("ARGV", ['-v'])
       @opt_cmd.run
       expect(@opt_cmd.command).to eq(:verbose)
     end
@@ -203,7 +197,7 @@ describe Moses do
 
   describe "run" do
     it "creates a local array of the ARGV array" do
-      ARGV = ['one', 'two', 'three']
+      stub_const("ARGV", ['one', 'two', 'three'])
       @app.stub(:parse_command)
       @app.run
       expect(@app.args).to eq(['one', 'two', 'three'])
@@ -211,7 +205,7 @@ describe Moses do
 
     describe "command parsing" do
       before do
-        ARGV = ['foo']
+        stub_const("ARGV", ['foo'])
         @app.run
       end
 
@@ -227,7 +221,7 @@ describe Moses do
     describe "option parsing" do
       describe "single dash flag" do
         it "creates a boolean option with single dash flags -f" do
-          ARGV = ['foo', '-f']
+          stub_const("ARGV", ['foo', '-f'])
           @app.run
           expect(@app.options[:f]).to be_true
         end
@@ -236,14 +230,14 @@ describe Moses do
       describe 'double dash flag' do
 
         it "removes the flags from the args array" do
-          ARGV = ['foo', '--flag', '-f']
+          stub_const("ARGV", ['foo', '--flag', '-f'])
           @app.run
           expect(@app.args).to eq([])
         end
 
         context 'with value' do
           it "creates a variable option" do
-            ARGV = ['foo', '--flag', 'value']
+            stub_const("ARGV", ['foo', '--flag', 'value'])
             @app.run
             expect(@app.options[:flag]).to eq('value')
           end
@@ -251,7 +245,7 @@ describe Moses do
 
         context 'without value' do
           it "creates a boolean option" do
-            ARGV = ['foo', '--flag']
+            stub_const("ARGV", ['foo', '--flag'])
             @app.run
             expect(@app.options[:flag]).to be_true
           end
@@ -261,26 +255,26 @@ describe Moses do
 
     describe "running commands" do
       it "sends the command if it is in the commands white list" do
-        ARGV = ['foo']
+        stub_const("ARGV", ['foo'])
         @app.stub(:foo)
         @app.should_receive(:foo)
         @app.run
       end
 
       it "does not send a command if it is not in the commands white list" do
-        ARGV = ['baz']
+        stub_const("ARGV", ['baz'])
         @app.should_not_receive(:baz)
         @app.run
       end
 
       it "does not send a command if the method is not defined" do
-        ARGV = ['bar']
+        stub_const("ARGV", ['bar'])
         @app.should_not_receive(:bar)
         @app.run
       end
 
       it "runs any option commands if the option was passed" do
-        ARGV = ['-h']
+        stub_const("ARGV", ['-h'])
         @app.should_receive(:help)
         @app.run
       end

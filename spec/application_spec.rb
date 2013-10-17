@@ -54,10 +54,9 @@ describe Moses::Application do
       it "makes an executable file" do
         expect(File.file?("#{@tmp_dir}/test_app/bin/test_app")).to be_true
         expect(File.executable?("#{@tmp_dir}/test_app/bin/test_app")).to be_true
-        expected_content = %Q{
-#!/usr/bin/env ruby
+        expected_content = %Q{#!/usr/bin/env ruby
 $: << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
-require 'test_app'
+require "test_app"
 TestApp.new.run
         }
         expect(File.read("#{@tmp_dir}/test_app/bin/test_app")).to eq(expected_content)
@@ -69,7 +68,8 @@ TestApp.new.run
 
       it "makes an applcation class file" do
         expect(File.file?("#{@tmp_dir}/test_app/lib/test_app.rb")).to be_true
-        expected_content = %Q{
+        expected_content = %Q{require "moses"
+
 class TestApp
   include Moses
 end

@@ -69,7 +69,7 @@ module Moses
   def parse_options
     @args.each_with_index do |arg, index|
       if flag?(arg)
-        #TODO split compound single dash flags
+        #TODO split compound single dash flags -abc
         next_index = index + 1
         if variable_option? index
           create_variable_option(arg, next_index)
@@ -82,7 +82,7 @@ module Moses
   end
 
   def parse_command
-    unless default_command
+    unless default_command && @args.first == default_command
       @command = @args.shift.to_sym if @args.first && @args.first.respond_to?(:to_sym)
     end
   end

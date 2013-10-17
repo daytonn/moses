@@ -59,10 +59,9 @@ class Moses::Application
       FileUtils.touch("#{@root_path}/#{@app_name}/bin/#{@app_name}")
       FileUtils.chmod("u+x", "#{@root_path}/#{@app_name}/bin/#{@app_name}")
       File.open("#{@root_path}/#{@app_name}/bin/#{@app_name}", 'w+') do |f|
-        f << %Q{
-#!/usr/bin/env ruby
+        f << %Q{#!/usr/bin/env ruby
 $: << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
-require '#{@app_name}'
+require "#{@app_name}"
 #{@app_name.camelize}.new.run
         }
       end
@@ -77,7 +76,8 @@ require '#{@app_name}'
     unless File.file?("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb")
       FileUtils.touch("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb")
       File.open("#{@root_path}/#{@app_name}/lib/#{@app_name}.rb", 'w+') do |f|
-        f << %Q{
+        f << %Q{require "moses"
+
 class #{@app_name.camelize}
   include Moses
 end
