@@ -1,4 +1,4 @@
-Moses
+Moses [![Build Status](https://secure.travis-ci.org/daytonn/moses.png)](http://travis-ci.org/daytonn/moses)
 =====
 Moses is a simple option/command parser for building command line applications in Ruby.
 ![image](moses.png)
