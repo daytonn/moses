@@ -11,6 +11,5 @@ group :development do
 end
 
 group :test do
-  gem 'nyan-cat-formatter'
-  gem 'unicorn-formatter'
+  gem 'fuubar'
 end
