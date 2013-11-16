@@ -12,7 +12,7 @@ Installation with ruby-gems:
 
 Installation with bundler:
 
-    gem 'moses', '0.1.5'
+    gem 'moses'
 
 Creating a Moses application
 ----------------------------
